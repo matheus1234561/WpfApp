@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Persons>
+  <Person>
+    <Id>0</Id>
+    <Name>Matheus</Name>
+    <CPF>romero</CPF>
+    <Address>romero</Address>
+  </Person>
+  <Person>
+    <Id>1</Id>
+    <Name>Matheus 2</Name>
+    <CPF>romero 2</CPF>
+    <Address>romero 2</Address>
+  </Person>
+  <Person>
+    <Id>2</Id>
+    <Name />
+    <CPF />
+    <Address />
+  </Person>
+</Persons>
