@@ -12,7 +12,7 @@ namespace WpfApp_Project.Views.Person_Pages
         {
             InitializeComponent();
 
-            DataContext = new PersonViewModel();
+            this.DataContext = new PersonViewModel();
         }
     }
 }

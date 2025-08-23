@@ -13,6 +13,38 @@ namespace WpfApp_Project.ViewModels
     {
         private PersonService _personService;
         private Person _person;
+
+        private ObservableCollection<Person> _persons { get; set; }
+
+        public ObservableCollection<Person> Persons
+        {
+            get
+            {
+                return _persons;
+            }
+            set
+            {
+                _persons = value;
+                OnPropertyChanged(nameof(Persons));
+            }
+        }
+
+        private ObservableCollection<Person> _filtredPersons { get; set; }
+
+
+        public ObservableCollection<Person> FiltredPersons
+        {
+            get
+            {
+                return _filtredPersons;
+            }
+            set
+            {
+                _filtredPersons = value;
+                OnPropertyChanged(nameof(FiltredPersons));
+            }
+        }
+
         private string _filterName;
         private string _filterCPF;
 
@@ -35,12 +67,9 @@ namespace WpfApp_Project.ViewModels
             set 
             {
                 _person = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Person));
             }
         }
-
-        public ObservableCollection<Person> Persons { get; set; }
-        public ObservableCollection<Person> FiltredPersons { get; set; }
 
         public ICommand SaveCommand { get; }
         public ICommand EditCommand { get; }
@@ -74,6 +103,7 @@ namespace WpfApp_Project.ViewModels
             Person.Id = _personService.GenerateLastId();
 
             Persons.Add(new Person { Id = Person.Id,  Name = Person.Name, CPF = Person.CPF, Address = Person.Address });
+            ApplyFilter();
 
             _personService.SavePerson(new List<Person>(Persons));
 
@@ -90,6 +120,8 @@ namespace WpfApp_Project.ViewModels
                 {
                     Persons[index] = p;
                 }
+
+                ApplyFilter();
             }
         }
 
@@ -99,6 +131,8 @@ namespace WpfApp_Project.ViewModels
             {
                 _personService.PersonExclude(p);
                 Persons.Remove(p);
+
+                ApplyFilter();
             }
         }
 
@@ -108,10 +142,14 @@ namespace WpfApp_Project.ViewModels
             var filterName = FilterName ?? "";
             var filterCPF = FilterCPF ?? "";
 
-            FiltredPersons = new ObservableCollection<Person>(
-                Persons.Where(p => p.Name.ToLower().Contains(filterName.ToLower()) &&
-                                   p.CPF.ToLower().Contains(filterCPF.ToLower()))
-                );
+            var filteredList = Persons.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower())) &&
+                                                   (p.CPF != null && p.CPF.ToLower().Contains(filterCPF.ToLower()))).ToList();
+
+            FiltredPersons.Clear();
+            foreach (var person in filteredList)
+            {
+                FiltredPersons.Add(person);
+            }
 
             OnPropertyChanged(nameof(FiltredPersons));
         }
