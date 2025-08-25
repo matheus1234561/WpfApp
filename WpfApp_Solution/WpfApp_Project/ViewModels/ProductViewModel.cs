@@ -16,7 +16,8 @@ namespace WpfApp_Project.ViewModels
         private Product _product;
 
         private string _filterName;
-        private decimal _filterPrice;
+        private string _filterMaxPrice;
+        private string _filterMinPrice;
 
         public ProductViewModel()
         {
@@ -29,6 +30,7 @@ namespace WpfApp_Project.ViewModels
             SaveCommand = new RelayCommand(SaveProducts);
             EditCommand = new RelayCommand(EditProduct);
             ExcludeCommand = new RelayCommand(ExcludeProduct);
+            FiltredProductRange = new RelayCommand(ApplyFilterPrice);
         }
 
         public Product Product
@@ -44,6 +46,7 @@ namespace WpfApp_Project.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand ExcludeCommand { get; }
+        public ICommand FiltredProductRange {  get; }
 
         private ObservableCollection<Product> _products { get; set; }
 
@@ -84,6 +87,23 @@ namespace WpfApp_Project.ViewModels
                 _filterName = value;
                 OnPropertyChanged();
                 ApplyFilter();
+            }
+        }
+        public string FilterMaxPrice
+        {
+            get { return _filterMaxPrice; }
+            set
+            {
+                _filterMaxPrice = value;
+                
+            }
+        }
+        public string FilterMinPrice
+        {
+            get { return _filterMinPrice; }
+            set
+            {
+                _filterMinPrice = value;
             }
         }
 
@@ -135,6 +155,42 @@ namespace WpfApp_Project.ViewModels
             var listProduct = _productService.LoadProductFromXml();
 
             var filteredList = listProduct.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower()))).ToList();
+
+            FiltredProducts.Clear();
+            foreach (var product in filteredList)
+            {
+                FiltredProducts.Add(product);
+            }
+
+            OnPropertyChanged(nameof(FiltredProducts));
+        }
+
+        private void ApplyFilterPrice(object parameter)
+        {
+            decimal? maxPrice = null;
+            decimal? minPrice = null;
+
+            var listProduct = _productService.LoadProductFromXml();
+
+            if (!decimal.TryParse(FilterMaxPrice, out decimal tempMaxPrice))
+            {
+                maxPrice = listProduct.Max(p => p.Price);
+            }
+            else
+            {
+                maxPrice = tempMaxPrice;
+            }
+
+            if (!decimal.TryParse(FilterMinPrice, out decimal tempMinPrice))
+            {
+                minPrice = listProduct.Min(p => p.Price);
+            }
+            else
+            {
+                minPrice = tempMinPrice;
+            }
+
+            var filteredList = listProduct.Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
 
             FiltredProducts.Clear();
             foreach (var product in filteredList)

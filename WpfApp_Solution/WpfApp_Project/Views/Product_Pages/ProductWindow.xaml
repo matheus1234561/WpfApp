@@ -11,6 +11,15 @@
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Label Content="Filtrar por nome:"/>
                 <TextBox Width="100" Margin="5" Text="{Binding FilterName}" />
+                
+              
+                <Label Content="Menor valor"/>
+                <TextBox Width="100" Margin="5" Text="{Binding FilterMinPrice, UpdateSourceTrigger=PropertyChanged}" />
+                <Label Content="Maior valor"/>
+                <TextBox Width="100" Margin="5" Text="{Binding FilterMaxPrice, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button Content="Filtrar por Intervalo" Width="120" VerticalAlignment="Top" Margin="5"  
+                Command="{Binding FiltredProductRange}" />
             </StackPanel>
 
             <DataGrid x:Name="dataGridProducts" ItemsSource="{Binding FiltredProducts}" AutoGenerateColumns="False" Margin="10">
