@@ -15,8 +15,11 @@ namespace WpfApp_Project.Services
         private const string caminhoXml = @"..\..\Data\Orders.xml";
 
 
-        public void SaveOrder(List<Order> orders)
+        public void SaveOrder(Order order)
         {
+            orders = LoadOrderFromXml();
+
+            orders.Add(order);
 
             XDocument doc = new XDocument(new XElement("Orders",
                 orders.ConvertAll(o => new XElement("Order",
@@ -77,39 +80,6 @@ namespace WpfApp_Project.Services
 
 
             return orders;
-        }
-
-        public void OrderEdit(Order editOrder)
-        {
-            List<Order> orders = LoadOrderFromXml();
-
-            var order = orders.FirstOrDefault(o => o.Id == editOrder.Id);
-
-            if (order != null)
-            {
-                order.Person = editOrder.Person;
-                order.Products = editOrder.Products;
-                order.DateOfSale = editOrder.DateOfSale;
-                order.TotalPrice = editOrder.TotalPrice;
-                order.PaymentMethod = editOrder.PaymentMethod;
-                order.Status = editOrder.Status;
-
-                SaveOrder(orders);
-            }
-        }
-
-        public void OrderExclude(Order excludeOrder)
-        {
-            List<Order> orders = LoadOrderFromXml();
-
-            var Order = orders.FirstOrDefault(o => o.Id == excludeOrder.Id);
-
-            if (Order != null)
-            {
-                orders.Remove(Order);
-
-                SaveOrder(orders);
-            }
         }
 
         public int GenerateLastId()

@@ -108,31 +108,29 @@ namespace WpfApp_Project.ViewModels
         {
             CPFValidate validate = new CPFValidate();
 
-            if (string.IsNullOrEmpty(Persons.Last().Name))
+            if (string.IsNullOrEmpty(FiltredPersons.Last().Name))
             {
                 MessageBox.Show("Nome não pode ser vazio");
                 return;
             }
 
-            if (string.IsNullOrEmpty(Persons.Last().CPF))
+            if (string.IsNullOrEmpty(FiltredPersons.Last().CPF))
             {
                 MessageBox.Show("CPF não pode ser vazio");
                 return;
             }
 
-            if (!validate.IsValidCpf(Persons.Last().CPF))
+            if (!validate.IsValidCpf(FiltredPersons.Last().CPF))
             {
                 MessageBox.Show("CPF informado não é válido.");
                 return;
             }
 
+            FiltredPersons.Last().Id = _personService.GenerateLastId();
 
-            Person.Id = _personService.GenerateLastId();
+            _personService.SavePerson(new List<Person>(FiltredPersons));
 
-            Persons.Add(new Person { Id = Person.Id,  Name = Person.Name, CPF = Person.CPF, Address = Person.Address });
             ApplyFilter();
-
-            _personService.SavePerson(new List<Person>(Persons));
 
             Person = new Person();
         }
@@ -142,10 +140,10 @@ namespace WpfApp_Project.ViewModels
             if(person is Person p)
             {
                 _personService.PersonEdit(p);
-                var index = Persons.IndexOf(p);
+                var index = FiltredPersons.IndexOf(p);
                 if(index >= 0)
                 {
-                    Persons[index] = p;
+                    FiltredPersons[index] = p;
                 }
 
                 ApplyFilter();
@@ -157,7 +155,7 @@ namespace WpfApp_Project.ViewModels
             if (person is Person p)
             {
                 _personService.PersonExclude(p);
-                Persons.Remove(p);
+                FiltredPersons.Remove(p);
 
                 ApplyFilter();
             }
@@ -168,7 +166,9 @@ namespace WpfApp_Project.ViewModels
             var filterName = FilterName ?? "";
             var filterCPF = FilterCPF ?? "";
 
-            var filteredList = Persons.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower())) &&
+            var listPerson = _personService.LoadPersonFromXml();
+
+            var filteredList = listPerson.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower())) &&
                                                    (p.CPF != null && p.CPF.ToLower().Contains(filterCPF.ToLower()))).ToList();
 
             FiltredPersons.Clear();

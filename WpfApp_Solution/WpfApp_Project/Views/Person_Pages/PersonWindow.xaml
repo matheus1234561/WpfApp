@@ -15,7 +15,7 @@
                     <TextBox Width="100" Margin="5" Text="{Binding FilterCPF}" />
             </StackPanel>
 
-            <DataGrid x:Name="dataGridPersons" ItemsSource="{Binding Persons}" AutoGenerateColumns="False" Margin="10">
+            <DataGrid x:Name="dataGridPersons" ItemsSource="{Binding FiltredPersons}" AutoGenerateColumns="False" Margin="10">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>

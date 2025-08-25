@@ -90,17 +90,17 @@ namespace WpfApp_Project.ViewModels
         private void SaveProducts(object product)
         {
 
-            if (string.IsNullOrEmpty(Products.Last().Name) || Products.Last().Price <= 0)
+            if (string.IsNullOrEmpty(FiltredProducts.Last().Name) || FiltredProducts.Last().Price <= 0)
             {
                 MessageBox.Show("Produto inválido. Verifique os dados.");
                 return;
             }
 
-            Product.Id = _productService.GenerateLastId();
+            FiltredProducts.Last().Id = _productService.GenerateLastId();
 
-            Products.Add(new Product { Id = Product.Id, Name = Product.Name, Code = Product.Code, Price = Product.Price });
+            _productService.SaveProduct(new List<Product>(FiltredProducts));
 
-            _productService.SaveProduct(new List<Product>(Products));
+            ApplyFilter();
 
             Product = new Product();
         }
@@ -110,10 +110,10 @@ namespace WpfApp_Project.ViewModels
             if (product is Product p)
             {
                 _productService.ProductEdit(p);
-                var index = Products.IndexOf(p);
+                var index = FiltredProducts.IndexOf(p);
                 if (index >= 0)
                 {
-                    Products[index] = p;
+                    FiltredProducts[index] = p;
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace WpfApp_Project.ViewModels
             if (product is Product p)
             {
                 _productService.ProductExclude(p);
-                Products.Remove(p);
+                FiltredProducts.Remove(p);
             }
         }
 
@@ -132,7 +132,9 @@ namespace WpfApp_Project.ViewModels
         {
             var filterName = FilterName ?? "";
 
-            var filteredList = Products.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower()))).ToList();
+            var listProduct = _productService.LoadProductFromXml();
+
+            var filteredList = listProduct.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower()))).ToList();
 
             FiltredProducts.Clear();
             foreach (var product in filteredList)

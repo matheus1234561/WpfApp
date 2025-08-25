@@ -53,6 +53,8 @@ namespace WpfApp_Project.ViewModels
 
         public ObservableCollection<Product> AvailableProducts { get; set; }
 
+        private string _filterName;
+
         public OrderViewModel(Person selectedPerson)
         {
             _orderService = new OrderService();
@@ -122,27 +124,36 @@ namespace WpfApp_Project.ViewModels
         public ICommand AddProductToOrderCommand { get; set; }
         public ICommand RemoveProductFromOrderCommand { get; set; }
 
+        public string FilterName
+        {
+            get { return _filterName; }
+            set
+            {
+                _filterName = value;
+                OnPropertyChanged();
+                ApplyFilter();
+            }
+        }
+
         private void SaveOrders(object parameter)
         {
 
             Order.Id = _orderService.GenerateLastId();
             Order.Person = new Person 
             { 
-                Id = Orders.Last().Person.Id, 
-                Name = Orders.Last().Person.Name, 
-                CPF = Orders.Last().Person.CPF,
-                Address = Orders.Last().Person.Address,
+                Id = FiltredOrders.Last().Person.Id, 
+                Name = FiltredOrders.Last().Person.Name, 
+                CPF = FiltredOrders.Last().Person.CPF,
+                Address = FiltredOrders.Last().Person.Address,
             };
-            Order.Products = Orders.Last().Products;
-            Order.TotalPrice = Orders.Last().TotalPrice;
+            Order.Products = FiltredOrders.Last().Products;
+            Order.TotalPrice = FiltredOrders.Last().TotalPrice;
             Order.DateOfSale = DateTime.Now.ToString("f");
-            Order.PaymentMethod = Order.PaymentMethod;
-            Order.Status = Order.Status;
+            Order.PaymentMethod = SelectedPaymentMethod;
+            Order.Status = SelectedPaymentStatus;
 
-            List<Order> finalOrder = new List<Order>();
-            finalOrder.Add(Order);
-
-            _orderService.SaveOrder(finalOrder);
+            _orderService.SaveOrder(Order);
+            ApplyFilter();
 
             Order = new Order();
         }
@@ -151,40 +162,40 @@ namespace WpfApp_Project.ViewModels
         {
             Order.Products.Add(product);
             Order.TotalPrice += product.Price;
-            Orders.Add(Order);
+            FiltredOrders.Add(Order);
         }
 
         private void RemoveProductFromOrder(Product product)
         {
-            var totalPrice = Orders.Last().TotalPrice;
+            var totalPrice = FiltredOrders.Last().TotalPrice;
             totalPrice -= product.Price;
 
             Order.Products.Add(product);
             Order.TotalPrice = (totalPrice);
 
 
-            if (Orders.Contains(Order))
+            if (FiltredOrders.Contains(Order))
             {
-                Orders.Remove(Order); 
+                FiltredOrders.Remove(Order); 
             }
         }
 
 
         private void ApplyFilter()
         {
-            //var filterName = FilterName ?? "";
-            //var filterCPF = FilterCPF ?? "";
+            var filterName = FilterName ?? "";
 
-            //var filteredList = Persons.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower())) &&
-            //                                       (p.CPF != null && p.CPF.ToLower().Contains(filterCPF.ToLower()))).ToList();
+            var filtredOrders = _orderService.LoadOrderFromXml();
 
-            //FiltredPersons.Clear();
-            //foreach (var person in filteredList)
-            //{
-            //    FiltredPersons.Add(person);
-            //}
+            var filteredOrderList = filtredOrders.Where(p => (p.Person.Name != null && p.Person.Name.ToLower().Contains(filterName.ToLower()))).ToList();
 
-            //OnPropertyChanged(nameof(FiltredPersons));
+            FiltredOrders.Clear();
+            foreach (var order in filteredOrderList)
+            {
+                FiltredOrders.Add(order);
+            }
+
+            OnPropertyChanged(nameof(FiltredOrders));
         }
     }
 }

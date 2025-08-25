@@ -13,7 +13,7 @@
                 <TextBox Width="100" Margin="5" Text="{Binding FilterName}" />
             </StackPanel>
 
-            <DataGrid x:Name="dataGridProducts" ItemsSource="{Binding Products}" AutoGenerateColumns="False" Margin="10">
+            <DataGrid x:Name="dataGridProducts" ItemsSource="{Binding FiltredProducts}" AutoGenerateColumns="False" Margin="10">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                     <DataGridTextColumn Header="Nome" Binding="{Binding Name,  UpdateSourceTrigger=PropertyChanged}" Width="200"/>
