@@ -11,8 +11,6 @@
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Label Content="Filtrar por nome:"/>
                 <TextBox Width="100" Margin="5" Text="{Binding FilterName}" />
-                <Label Content=" Filtrar por CPF:"/>
-                <TextBox Width="100" Margin="5" Text="{Binding FilterCPF}" />
             </StackPanel>
 
             <DataGrid x:Name="dataGridProducts" ItemsSource="{Binding Products}" AutoGenerateColumns="False" Margin="10">
@@ -20,7 +18,7 @@
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                     <DataGridTextColumn Header="Nome" Binding="{Binding Name,  UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                     <DataGridTextColumn Header="Código" Binding="{Binding Code,  UpdateSourceTrigger=PropertyChanged}" Width="100"/>
-                    <DataGridTextColumn Header="Valor" Binding="{Binding Price,  UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                    <DataGridTextColumn x:Name="DecimalInput" Header="Valor" Binding="{Binding Price,  UpdateSourceTrigger=PropertyChanged}" Width="100"/>
 
 
                     <DataGridTemplateColumn Header="Ações" Width="350">

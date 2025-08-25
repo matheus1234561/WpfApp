@@ -16,7 +16,7 @@ namespace WpfApp_Project
             
             var personsWindow = new PersonWindow();
             var productWindow = new ProductWindow();
-            //personsWindow.Show();
+            personsWindow.Show();
             productWindow.Show();
         }
     }

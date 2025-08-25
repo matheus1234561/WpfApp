@@ -71,22 +71,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="command\Generic\RelayCommand.cs" />
     <Compile Include="command\RelayCommand.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="ViewModels\baseModel\BaseViewModel.cs" />
+    <Compile Include="ViewModels\OrderViewModel.cs" />
     <Compile Include="ViewModels\PersonViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\ProductViewModel.cs" />
+    <Compile Include="Views\Order_Pages\OrderWindow.xaml.cs">
+      <DependentUpon>OrderWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Person_Pages\PersonWindow.xaml.cs">
       <DependentUpon>PersonWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Product_Pages\ProductWindow.xaml.cs">
       <DependentUpon>ProductWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Order_Pages\OrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Person_Pages\PersonWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,9 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Data\Orders.xml" />
     <Content Include="Data\Persons.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

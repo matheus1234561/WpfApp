@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Orders>
+  <Order>
+    <Id>1</Id>
+    <Person>
+      <Id>0</Id>
+      <Name>Matheus</Name>
+      <CPF>123</CPF>
+    </Person>
+    <Products>
+      <Product>
+        <Id>0</Id>
+        <Code>1</Code>
+        <Name>Guaraná</Name>
+        <Price>12.00</Price>
+      </Product>
+      <Product>
+        <Id>1</Id>
+        <Code>2</Code>
+        <Name>Coca-cola</Name>
+        <Price>13.00</Price>
+      </Product>
+      <Product>
+        <Id>0</Id>
+        <Code>1</Code>
+        <Name>Guaraná</Name>
+        <Price>12.00</Price>
+      </Product>
+    </Products>
+    <DateOfSale>2025-08-25T01:41:27.1090098-03:00</DateOfSale>
+    <TotalPrice>37.00</TotalPrice>
+    <PaymentMethod>Card</PaymentMethod>
+    <Status>pending</Status>
+  </Order>
+</Orders>

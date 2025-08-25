@@ -1,0 +1,58 @@
+﻿<Window x:Class="WpfApp_Project.Views.Order_Pages.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp_Project.Views.Order_Pages"
+        mc:Ignorable="d"
+        Title="OrderWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Nome:"/>
+                <TextBlock Text="{Binding Person.Name}" FontWeight="Bold"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="10" >
+                <TextBlock Text="Produtos Disponíveis" FontWeight="Bold"/>
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding AvailableProducts}" AutoGenerateColumns="False" Margin="10">
+                
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                    <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="100"/>
+                    <DataGridTextColumn Header="Código" Binding="{Binding Code}" Width="100"/>
+                    <DataGridTextColumn Header="Preço" Binding="{Binding Price}" Width="100"/>
+                    <DataGridTemplateColumn Header="Ações" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Adicionar" Width="60" Margin="5" Command="{Binding DataContext.AddProductToOrderCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}">
+                                    </Button>
+                                    <Button Content="Remover"  Width="60" Margin="5" Command="{Binding DataContext.RemoveProductFromOrderCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}">
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Margin="10" >
+                <TextBlock Text="Pedido" FontWeight="Bold"/>
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding Orders}" AutoGenerateColumns="False" Margin="10">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                    <DataGridTextColumn Header="Nome" Binding="{Binding Person.Name}" Width="100"/>
+                    <DataGridTextColumn Header="Preço" Binding="{Binding TotalPrice}" Width="100"/>
+                </DataGrid.Columns>
+                
+            </DataGrid>
+
+            <Button Content="Finalizar Pedido" Command="{Binding SaveCommand}" Margin="10" Width="100" HorizontalAlignment="Left"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>

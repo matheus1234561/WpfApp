@@ -23,7 +23,7 @@
                     <DataGridTextColumn Header="Address" Binding="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
 
 
-                    <DataGridTemplateColumn Header="Ações" Width="350">
+                    <DataGridTemplateColumn Header="Ações" Width="250">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -31,7 +31,7 @@
                                     </Button>
                                     <Button Content="Excluir" Width="60" Margin="5" Command="{Binding DataContext.ExcludeCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}">
                                     </Button>
-                                    <Button Content="Incluir Pedido" Width="100" Margin="5" >
+                                    <Button Content="Incluir Pedido" Width="100" Margin="5" Command="{Binding DataContext.SelectPersonCommand, RelativeSource={RelativeSource AncestorType=Window}}"  CommandParameter="{Binding}">
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>

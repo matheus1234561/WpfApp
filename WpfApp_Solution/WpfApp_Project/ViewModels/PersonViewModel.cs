@@ -6,6 +6,7 @@ using WpfApp_Project.command;
 using WpfApp_Project.Models;
 using WpfApp_Project.Services;
 using WpfApp_Project.ViewModels.baseModel;
+using WpfApp_Project.Views.Order_Pages;
 
 namespace WpfApp_Project.ViewModels
 {
@@ -59,6 +60,8 @@ namespace WpfApp_Project.ViewModels
             SaveCommand = new RelayCommand(SavePersons);
             EditCommand = new RelayCommand(EditPerson);
             ExcludeCommand = new RelayCommand(ExcludePerson);
+            SelectPersonCommand = new RelayCommand(SelectPerson);
+
         }
 
         public Person Person
@@ -74,6 +77,8 @@ namespace WpfApp_Project.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand ExcludeCommand { get; }
+        public ICommand SelectPersonCommand { get; }
+
 
         public string FilterName
         {
@@ -136,7 +141,6 @@ namespace WpfApp_Project.ViewModels
             }
         }
 
-
         private void ApplyFilter()
         {
             var filterName = FilterName ?? "";
@@ -152,6 +156,16 @@ namespace WpfApp_Project.ViewModels
             }
 
             OnPropertyChanged(nameof(FiltredPersons));
+        }
+
+        private void SelectPerson(object parameter)
+        {
+
+            if (parameter is Person selectedPerson)
+            {
+                var orderWindow = new OrderWindow(selectedPerson);
+                orderWindow.Show();
+            }
         }
     }
 }

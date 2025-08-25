@@ -19,7 +19,7 @@ namespace WpfApp_Project.Services
                     new XElement("Id", p.Id),
                     new XElement("Name", p.Name),
                     new XElement("Code", p.Code),
-                    new XElement("Price", p.Price)))));
+                    new XElement("Price", p.Price.ToString("F2"))))));
 
             doc.Save(caminhoXml);
         }

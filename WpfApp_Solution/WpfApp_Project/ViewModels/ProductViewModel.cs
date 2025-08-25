@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using WpfApp_Project.command;
 using WpfApp_Project.Models;
@@ -15,7 +16,7 @@ namespace WpfApp_Project.ViewModels
         private Product _product;
 
         private string _filterName;
-        private string _filterCPF;
+        private decimal _filterPrice;
 
         public ProductViewModel()
         {
@@ -86,19 +87,14 @@ namespace WpfApp_Project.ViewModels
             }
         }
 
-        public string FilterCPF
-        {
-            get { return _filterCPF; }
-            set
-            {
-                _filterCPF = value;
-                OnPropertyChanged();
-                ApplyFilter();
-            }
-        }
-
         private void SaveProducts(object product)
         {
+
+            if (string.IsNullOrEmpty(Products.Last().Name) || Products.Last().Price <= 0)
+            {
+                MessageBox.Show("Produto inválido. Verifique os dados.");
+                return;
+            }
 
             Product.Id = _productService.GenerateLastId();
 
@@ -135,7 +131,6 @@ namespace WpfApp_Project.ViewModels
         private void ApplyFilter()
         {
             var filterName = FilterName ?? "";
-            var filterCPF = FilterCPF ?? "";
 
             var filteredList = Products.Where(p => (p.Name != null && p.Name.ToLower().Contains(filterName.ToLower()))).ToList();
 
@@ -147,5 +142,6 @@ namespace WpfApp_Project.ViewModels
 
             OnPropertyChanged(nameof(FiltredProducts));
         }
+
     }
 }
