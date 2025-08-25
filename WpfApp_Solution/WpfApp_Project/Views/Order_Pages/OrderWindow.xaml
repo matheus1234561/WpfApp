@@ -23,6 +23,8 @@
                     <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="100"/>
                     <DataGridTextColumn Header="Código" Binding="{Binding Code}" Width="100"/>
                     <DataGridTextColumn Header="Preço" Binding="{Binding Price}" Width="100"/>
+                    
+                    
                     <DataGridTemplateColumn Header="Ações" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -46,12 +48,36 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                     <DataGridTextColumn Header="Nome" Binding="{Binding Person.Name}" Width="100"/>
-                    <DataGridTextColumn Header="Preço" Binding="{Binding TotalPrice}" Width="100"/>
+                    <DataGridTextColumn Header="Preço Total" Binding="{Binding TotalPrice}" Width="100"/>
+                    <DataGridTextColumn Header="Método de Pagamento" Binding="{Binding PaymentMethod}" Width="145"/>
+                    <DataGridTextColumn Header="Status do Pedido" Binding="{Binding Status}" Width="100"/>
                 </DataGrid.Columns>
                 
             </DataGrid>
 
-            <Button Content="Finalizar Pedido" Command="{Binding SaveCommand}" Margin="10" Width="100" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="500"  Margin="10">
+                <Button Content="Finalizar Pedido" Command="{Binding SaveCommand}" Margin="10" Width="100"/>
+                <ComboBox x:Name="PaymentStatusComboBox"
+                            ItemsSource="{Binding PaymentMethodOptions}" 
+                            SelectedItem="{Binding SelectedPaymentMethod}" 
+                            Margin="10" 
+                            Width="100"/>
+
+
+                <TextBlock Text="{Binding SelectedPaymentMethod}" 
+                            FontSize="16" FontWeight="Bold" Margin="10"/>
+
+
+                <ComboBox x:Name="PaymentMethodComboBox"
+                            ItemsSource="{Binding PaymentStatusOptions}" 
+                            SelectedItem="{Binding SelectedPaymentStatus}" 
+                            Margin="10" 
+                            Width="100"/>
+
+
+                <TextBlock Text="{Binding SelectedPaymentStatus}" 
+                            FontSize="16" FontWeight="Bold" Margin="10"/>
+            </StackPanel>
         </StackPanel>
         
     </Grid>

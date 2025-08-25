@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using WpfApp_Project.command;
 using WpfApp_Project.Models;
 using WpfApp_Project.Services;
+using WpfApp_Project.Validators;
 using WpfApp_Project.ViewModels.baseModel;
 using WpfApp_Project.Views.Order_Pages;
 
@@ -104,6 +106,26 @@ namespace WpfApp_Project.ViewModels
 
         private void SavePersons(object paramater)
         {
+            CPFValidate validate = new CPFValidate();
+
+            if (string.IsNullOrEmpty(Persons.Last().Name))
+            {
+                MessageBox.Show("Nome não pode ser vazio");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(Persons.Last().CPF))
+            {
+                MessageBox.Show("CPF não pode ser vazio");
+                return;
+            }
+
+            if (!validate.IsValidCpf(Persons.Last().CPF))
+            {
+                MessageBox.Show("CPF informado não é válido.");
+                return;
+            }
+
 
             Person.Id = _personService.GenerateLastId();
 
@@ -163,6 +185,11 @@ namespace WpfApp_Project.ViewModels
 
             if (parameter is Person selectedPerson)
             {
+                if (string.IsNullOrEmpty(selectedPerson.Name))
+                {
+                    MessageBox.Show("É necessário associar o pedido a uma pessoa.");
+                    return;
+                }
                 var orderWindow = new OrderWindow(selectedPerson);
                 orderWindow.Show();
             }

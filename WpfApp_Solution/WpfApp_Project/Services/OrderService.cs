@@ -57,14 +57,14 @@ namespace WpfApp_Project.Services
                                    CPF = (string)o.Element("Person").Element("CPF"),
                                    Address = (string)o.Element("Person").Element("Address"),
                                },
-                               Products = (from prod in o.Descendants("Products") select new Product
+                               Products = (from prod in o.Element("Products").Descendants("Product") select new Product
                                {
                                    Id = (int)prod.Element("Id"),
                                    Code = (string)prod.Element("Code"),
                                    Name = (string)prod.Element("Name"),
-                                   Price = decimal.Parse(prod.Element("Price").Value ?? "0"),
+                                   Price = (decimal)prod.Element("Price"),
                                }).ToList(),
-                               DateOfSale = (DateTime)o.Element("DateOfSale"),
+                               DateOfSale = (string)o.Element("DateOfSale"),
                                TotalPrice = (decimal)o.Element("TotalPrice"),
                                PaymentMethod = (PaymentMethod)Enum.Parse(typeof(PaymentMethod),(string)o.Element("PaymentMethod")),
                                Status = (PaymentStatus)Enum.Parse(typeof(PaymentStatus), (string)o.Element("Status"))

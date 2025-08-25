@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Xml.Linq;
 using WpfApp_Project.command;
 using WpfApp_Project.command.Generic;
 using WpfApp_Project.Models;
@@ -20,6 +17,8 @@ namespace WpfApp_Project.ViewModels
         private OrderService _orderService;
         private ProductService _productService;
         private Order _order;
+        private PaymentMethod _paymentMethod;
+        private PaymentStatus _paymentStatus;
 
         private ObservableCollection<Order> _orders { get; set; }
 
@@ -59,6 +58,12 @@ namespace WpfApp_Project.ViewModels
             _orderService = new OrderService();
             _productService = new ProductService();
 
+            PaymentMethodOptions = Enum.GetValues(typeof(PaymentMethod)).Cast<PaymentMethod>().ToList();
+            PaymentStatusOptions = Enum.GetValues(typeof(PaymentStatus)).Cast<PaymentStatus>().ToList();
+
+            SelectedPaymentMethod = PaymentMethod.Card;
+            SelectedPaymentStatus = PaymentStatus.pending;
+
             OrderProducts = new ObservableCollection<Product>();
 
             AvailableProducts = new ObservableCollection<Product>(_productService.LoadProductFromXml());
@@ -81,7 +86,37 @@ namespace WpfApp_Project.ViewModels
         public Order Order { get; set; }
         public Person Person { get; set; }
 
+        public List<PaymentMethod> PaymentMethodOptions { get; set; }
+
+        public List<PaymentStatus> PaymentStatusOptions { get; set; }
+
         public ObservableCollection<Product> OrderProducts { get; set; }
+
+        public PaymentMethod SelectedPaymentMethod
+        {
+            get => _paymentMethod;
+            set
+            {
+                if (_paymentMethod != value)
+                {
+                    _paymentMethod = value;
+                    OnPropertyChanged(nameof(SelectedPaymentMethod));
+                }
+            }
+        }
+
+        public PaymentStatus SelectedPaymentStatus
+        {
+            get => _paymentStatus;
+            set
+            {
+                if (_paymentStatus != value)
+                {
+                    _paymentStatus = value;
+                    OnPropertyChanged(nameof(SelectedPaymentStatus));
+                }
+            }
+        }
 
         public ICommand SaveCommand { get; set; }
         public ICommand AddProductToOrderCommand { get; set; }
@@ -100,9 +135,9 @@ namespace WpfApp_Project.ViewModels
             };
             Order.Products = Orders.Last().Products;
             Order.TotalPrice = Orders.Last().TotalPrice;
-            Order.DateOfSale = DateTime.Now;
-            Order.PaymentMethod = PaymentMethod.Card;
-            Order.Status = PaymentStatus.pending;
+            Order.DateOfSale = DateTime.Now.ToString("f");
+            Order.PaymentMethod = Order.PaymentMethod;
+            Order.Status = Order.Status;
 
             List<Order> finalOrder = new List<Order>();
             finalOrder.Add(Order);
@@ -110,32 +145,6 @@ namespace WpfApp_Project.ViewModels
             _orderService.SaveOrder(finalOrder);
 
             Order = new Order();
-        }
-
-        private void EditOrder(object order)
-        {
-            if (order is Order o)
-            {
-                _orderService.OrderEdit(o);
-                var index = Orders.IndexOf(o);
-                if (index >= 0)
-                {
-                    Orders[index] = o;
-                }
-
-                ApplyFilter();
-            }
-        }
-
-        private void ExcludeOrder(object order)
-        {
-            if (order is Order o)
-            {
-                _orderService.OrderExclude(o);
-                Orders.Remove(o);
-
-                ApplyFilter();
-            }
         }
 
         private void AddProductToOrder(Product product)
@@ -147,11 +156,15 @@ namespace WpfApp_Project.ViewModels
 
         private void RemoveProductFromOrder(Product product)
         {
+            var totalPrice = Orders.Last().TotalPrice;
+            totalPrice -= product.Price;
+
             Order.Products.Add(product);
-            Order.TotalPrice -= product.Price;
+            Order.TotalPrice = (totalPrice);
+
 
             if (Orders.Contains(Order))
-            { 
+            {
                 Orders.Remove(Order); 
             }
         }

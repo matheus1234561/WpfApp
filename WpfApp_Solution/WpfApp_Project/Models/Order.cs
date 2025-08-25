@@ -46,7 +46,7 @@ namespace WpfApp_Project.Models
 
         public decimal TotalPrice { get; set; }
 
-        public DateTime DateOfSale { get; set; }
+        public string DateOfSale { get; set; }
 
         [Required(ErrorMessage = "A Forma de pagamento é obrigatória")]
         public PaymentMethod PaymentMethod

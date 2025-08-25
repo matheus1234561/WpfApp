@@ -76,6 +76,7 @@
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Validators\CPFValidate.cs" />
     <Compile Include="ViewModels\baseModel\BaseViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
     <Compile Include="ViewModels\PersonViewModel.cs" />
