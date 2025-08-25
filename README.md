@@ -25,3 +25,7 @@ Cada janela tem funções de:
 - Salvar no arquivo XML
 
 Além disso, o projeto inclui validações para garantir que os dados sejam inseridos corretamente.
+
+## Observações
+
+Na hora de adicionar pessoas e produtos, se atentar em dar um "TAB" para a interface cria uma nova row para adicionar o próximo.
